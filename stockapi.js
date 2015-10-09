@@ -19,3 +19,8 @@ function getMultipleStocksInfo(symbols, cb){
         fields: ['s', 'n', 'l1', 'b2','b3', 'y', 'r', 'm3', 'm4', 'm6', 'm8'],
     }, cb);
 }
+
+module.exports={
+    getStockInfo: getStockInfo,
+    getMultipleStocksInfo: getMultipleStocksInfo
+}
