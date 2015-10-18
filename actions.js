@@ -17,10 +17,10 @@ function buyStock(user,stock, price, amount){
         //If stock exists in user's portfolio, update amount else create
         //stock in user's portfolio
         if (portfolio[stock]){
-            portfolio[stock].amount=amount;
+            portfolio[stock].amount+=amount;
         }
         else{
-            portfolio[stock]=new Stock(stock, price);
+            portfolio[stock]=new PortfolioAsset(stock, amount);
         }
 
         //Remember the transaction in user's history
