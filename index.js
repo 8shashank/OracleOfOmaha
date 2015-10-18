@@ -8,7 +8,7 @@ var users=[];
 function updateUsers(){
     users.forEach(function(user){
         user.rules.forEach(function(rule){
-            rule.execute();
+            rule.execute(user, market);
         });
     });
 }
