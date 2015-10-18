@@ -45,7 +45,7 @@ function makeRule(stock, value, quantity, action){
         //Meaning sell 'quantity' amounts of stock if its price is less than 'value'
         return new SellIfStockGreaterThan(stock, value, quantity);
     }
-    //Have to check for null after making rule
+    //Have to check for null after making rule. Do this or return dummy rule?
     return null;
 }
 
