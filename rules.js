@@ -5,8 +5,7 @@ function SellIfStockGreaterThan(stock, value, quantityToSell){
     this.stock=stock;
     this.quantity=quantityToSell;
 
-    this.execute=new function(user, market){
-
+    this.execute=function(user, market){
         //Sanity check to make sure variables exist
         if(user.portfolio[stock] && market[stock]) {
 
@@ -23,7 +22,7 @@ function BuyIfStockLessThan(stock, value, quantityToBuy){
     this.stock=stock;
     this.quantity=quantityToBuy;
 
-    this.execute=new function(user, market){
+    this.execute=function(user, market){
 
         //Sanity check to make sure variables exist
         if(user.portfolio[stock] && market[stock]) {

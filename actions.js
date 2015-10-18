@@ -1,12 +1,13 @@
 var models=require('./models');
-var User=models.User;
 var Stock=models.Stock;
 var Transaction=models.Transaction;
 
+var moneyAsset="$$MONEY";       //Constant
+
 //Function to call to buy stock
-buyStock= new function(user,stock, price, amount){
+function buyStock(user,stock, price, amount){
     var portfolio=user.portfolio;
-    var userBalance=user.portfolio["Money"];
+    var userBalance=user.portfolio[moneyAsset];
     var totalPurchaseCost=price*amount;
 
     //Check that user has required balance to purchase this stock
@@ -28,9 +29,9 @@ buyStock= new function(user,stock, price, amount){
 };
 
 //Function to call to sell stock
-sellStock=new function(user, stock, price, amount){
+function sellStock(user, stock, price, amount){
     var portfolio=user.portfolio;
-    var userBalance=user.portfolio["Money"];
+    var userBalance=user.portfolio[moneyAsset];
     var stockToSell=portfolio[stock];
     var totalSellPrice=price*amount;
 
@@ -42,7 +43,9 @@ sellStock=new function(user, stock, price, amount){
     }
 };
 
+
 module.exports={
     buyStock: buyStock,
-    sellStock: sellStock
+    sellStock: sellStock,
+    moneyAsset: moneyAsset
 };

@@ -1,8 +1,8 @@
 //Contains stuff that needs to be put in database
 
-function User(name, transactions, portfolio, rules){
+function User(name, portfolio, rules){
     this.name=name;
-    this.transactions=transactions;
+    this.transactions=[];
     this.portfolio=portfolio;
     this.rules= rules|| [];
 }
@@ -15,13 +15,14 @@ function Transaction(stock, price, amount, action, timestamp){
     this.timestamp=timestamp;
 }
 
-function PortfolioAsset(name, amount){
-    this.name=name;
+function PortfolioAsset(symbol, amount){
+    this.symbol=symbol;
     this.amount=amount;
 }
 
-function Stock(name, price){
+function Stock(name, symbol, price){
     this.name=name;
+    this.symbol=symbol;
     this.price=price;
 }
 
