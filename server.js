@@ -1,6 +1,8 @@
 var express = require('express');
 var app = express();
-var stockapis = require('./stockapi')
+var stockapis = require('./stockapi');
+var index = require('./index');
+var driver = require('./driver');
 
 app.get('/', function (req, res) {
    res.sendFile( __dirname + "/" + "index.html" );
@@ -10,24 +12,23 @@ app.get('/', function (req, res) {
 app.get('/getID', function (req, res) {
    response = req.query.id;
    console.log(response);
-   queryIDinfo(response);
-   res.end(response);
+   driver.searchUser(response, function(userData){
+   		console.log(userData.portfolio);
+   		res.end(JSON.stringify(userData.portfolio));
+   });
 });
 
 // anyone can get/search for a stock quote using the stock ticker symbol
 app.get('/liststock', function (req, res){
 	response = req.query.stockID;
-	stockapis.getStockInfo(response, function(err, snapshot){
-		console.log(snapshot);
-		res.end(JSON.stringify(snapshot));
-	});
+	res.end(JSON.stringify(index.market[response]));
 });
 
 app.get('/addStock', function (req, res){
 	id = req.query.id;
 	stock = req.query.stocksymbol;
 	console.log(id,stock);
-	addStockToDB(id, stock);
+	driver.addStock(id, stock);
 	res.end("You have added " + stock + " to your list of stocks to track. Go back to add more");
 });
 
@@ -35,7 +36,7 @@ app.get('/removeStock', function (req,res){
 	id = req.query.id;
 	stock = req.query.stocksymbol;
 	console.log(id, stock);
-	removeStockFromDB(id, stock);
+	driver.delStock(id, stock);
 	res.end("You have removed " + stock + " from your list of stocks to track");
 
 });
@@ -73,3 +74,9 @@ function addRule(id, stockSymbol, buyOrSell, price){
 var server = app.listen(8080, function () {
   console.log("Server listening at http://localhost:8080");
 });
+
+index.addTestVals();
+//Run the update function for the first time immediately
+index.update();
+//Run the update function every 5 seconds from now on
+//var runner=setInterval(index.update,5000);

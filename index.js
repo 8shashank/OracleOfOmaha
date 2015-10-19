@@ -54,12 +54,16 @@ function update(){
 };
 
 function addTestVals(){
+    var track = {
+        'AAPL': 'APPL',
+        'MSFT': 'MSFT'
+    }
     var rules=[RuleBuilder.makeRule('AAPL', 500, 30, 'BUY'), RuleBuilder.makeRule('MSFT', 300, 10, 'SELL')];
     var portfolio={
-        "$$MONEY": new PortfolioAsset(moneyAsset, 10000),
+        "$$MONEY": new PortfolioAsset("$$MONEY", 10000),
         "AAPL": new PortfolioAsset("AAPL", 3000)
     };
-    users.push(new User("Joe West", portfolio, rules ));
+    users.push(new User("Joe West", portfolio, track, rules ));
 }
 
 function saveToDatabase(){
@@ -75,13 +79,10 @@ function stopProgram(){
     saveToDatabase();
 }
 
-addTestVals();
-
-//Run the update function for the first time immediately
-update();
-//Run the update function every 5 seconds from now on
-var runner=setInterval(update,5000);
-
 module.exports={
-
+    addTestVals: addTestVals,
+    update: update,
+    market: market,
+    users: users,
+    stocklist: stocklist
 }

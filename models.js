@@ -1,9 +1,10 @@
 //Contains stuff that needs to be put in database
 
-function User(name, portfolio, rules){
+function User(name, portfolio, track, rules){
     this.name=name;
     this.transactions=[];
     this.portfolio=portfolio;
+    this.track=track;
     this.rules= rules|| [];
 }
 
