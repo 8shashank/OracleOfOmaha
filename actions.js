@@ -6,6 +6,7 @@ var moneyAsset="$$MONEY";       //Constant
 
 //Function to call to buy stock
 function buyStock(user,stock, price, amount){
+    console.log(user, stock, price, amount);
     var portfolio=user.portfolio;
     var userBalance=user.portfolio[moneyAsset];
     var totalPurchaseCost=price*amount;

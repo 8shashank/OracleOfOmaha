@@ -57,7 +57,7 @@ function update(){
 function addTestVals(){
     var rules=[RuleBuilder.makeRule('AAPL', 500, 30, 'BUY'), RuleBuilder.makeRule('MSFT', 300, 10, 'SELL')];
     var portfolio={
-        moneyAsset: new PortfolioAsset(moneyAsset, 10000),
+        "$$MONEY": new PortfolioAsset(moneyAsset, 10000),
         "AAPL": new PortfolioAsset("AAPL", 3000)
     };
     users.push(new User("Joe West", portfolio, rules ));
