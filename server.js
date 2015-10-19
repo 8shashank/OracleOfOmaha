@@ -1,6 +1,6 @@
 var express = require('express');
 var app = express();
-var stockapis = require('./stockapis')
+var stockapis = require('./stockapi')
 
 app.get('/', function (req, res) {
    res.sendFile( __dirname + "/" + "index.html" );

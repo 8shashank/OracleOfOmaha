@@ -50,4 +50,4 @@ function makeRule(stock, value, quantity, action){
 
 module.exports={
     makeRule: makeRule
-}
+};

@@ -5,7 +5,6 @@ var models=require('./models');
 var Stock=models.Stock;
 var User=models.User;
 var PortfolioAsset=models.PortfolioAsset;
-var moneyAsset=require('./actions').moneyAsset;   //Constant string denoting money in portfolio
 
 //Variable declarations
 var database={};    //TODO decide if we are going to save to database or not
@@ -82,3 +81,7 @@ addTestVals();
 update();
 //Run the update function every 5 seconds from now on
 var runner=setInterval(update,5000);
+
+module.exports={
+
+}
