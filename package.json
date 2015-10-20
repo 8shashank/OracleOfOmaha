@@ -1,0 +1,24 @@
+{
+  "name": "OracleOfOmaha",
+  "version": "1.0.0",
+  "description": "Trade fake money, make fake money",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.13.3",
+    "yahoo-finance": "^0.2.12"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cs4278-2015/OracleOfOmaha.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cs4278-2015/OracleOfOmaha/issues"
+  },
+  "homepage": "https://github.com/cs4278-2015/OracleOfOmaha"
+}
