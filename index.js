@@ -39,6 +39,14 @@ function updateMarket(data){
     });
 }
 
+function resetRuleFlags(){
+    users.forEach(function(user){
+        user.rules.forEach(function(rule){
+            rule.alreadyExecuted=false;
+        })
+    })
+};
+
 //Updates entire application
 function update(){
     var cb = function (err, data){
@@ -82,6 +90,7 @@ function stopProgram(){
 module.exports={
     addTestVals: addTestVals,
     update: update,
+    resetRuleFlags: resetRuleFlags,
     market: market,
     users: users,
     stocklist: stocklist

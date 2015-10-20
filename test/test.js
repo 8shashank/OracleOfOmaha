@@ -57,4 +57,8 @@ describe('Rules', function(){
             assert(testPortfolio['$$MONEY'].amount == 1000 - 50 * 10, 'Buyer did not pay the correct amount for their stocks');
         });
     });
+
+    describe('Outlier cases', function(){
+
+    });
 })
