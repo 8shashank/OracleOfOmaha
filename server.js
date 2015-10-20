@@ -78,32 +78,38 @@ app.get('/trackRule', function(req,res){
 	id = req.query.id;
 	stockSymbol = req.query.stockSymbol;
 	buyorsell = req.query.buyOrSell;
-	price = req.query.price;
-	quantity = req.query.quantity;
-	users = index.users;
+	price = parseInt(req.query.price);
+	quantity = parseInt(req.query.quantity);
 
-	for(var i = 0; i < users.length; i++){
-		if(users[i].name === id){
-			userRules = users[i].rules;
+	var cb= function(exists) {
+		if(!exists) {
+			res.end("This stock does not exist");
 		}
-	}
-	
-	price = parseFloat(price);
-	quantity = parseInt(quantity);
-	if(buyorsell.toUpperCase() === "BUY"){
-		userRules.push(rules.makeRule(stockSymbol, price, quantity, "BUY"));
-		res.end("You have added the rule for " + stockSymbol + ": BUY at price less than " + price);
-		console.log(userRules);
-	}
-	else if(buyorsell.toUpperCase() === "SELL"){
-		userRules.push(rules.makeRule(stockSymbol, price, quantity, "SELL"));
-		res.end("You have added the rule for " + stockSymbol + ": SELL at price greater than " + price);
-		console.log(userRules);
+		else{
+			users = index.users;
+			for(var i = 0; i < users.length; i++){
+				if(users[i].name === id){
+					userRules = users[i].rules;
+				}
+			}
+			if(buyorsell.toUpperCase() === "BUY"){
+				userRules.push(rules.makeRule(stockSymbol, price, quantity, "BUY"));
+				res.end("You have added the rule for " + stockSymbol + ": BUY at price less than " + price);
+				console.log(userRules);
+			}
+			else if(buyorsell.toUpperCase() === "SELL"){
+				userRules.push(rules.makeRule(stockSymbol, price, quantity, "SELL"));
+				res.end("You have added the rule for " + stockSymbol + ": SELL at price greater than " + price);
+				console.log(userRules);
 
-	}
-	else{
-		res.end("Please enter a valid command(BUY or SELL)");
-	}
+			}
+			else{
+				res.end("Please enter a valid command(BUY or SELL)");
+			}
+		}
+	};
+
+	checkValidStockAndCallback(stockSymbol, cb);
 });
 
 function checkValidStockAndCallback(stock, cb) {
