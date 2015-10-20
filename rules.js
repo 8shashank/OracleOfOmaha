@@ -33,7 +33,7 @@ function BuyIfStockLessThan(stock, value, quantityToBuy){
             return;
         }
         //Sanity check to make sure variables exist
-        if(user.portfolio[stock] && market[stock]) {
+        if(market[stock]) {
 
             var marketPrice=market[stock].price;
             if (marketPrice<value) {

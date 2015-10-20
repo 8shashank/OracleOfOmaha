@@ -1,7 +1,7 @@
 var models=require('./models');
 var Stock=models.Stock;
 var Transaction=models.Transaction;
-
+var PortfolioAsset=models.PortfolioAsset;
 var moneyAsset="$$MONEY";       //Constant
 
 //Function to call to buy stock
@@ -23,7 +23,7 @@ function buyStock(user,stock, price, amount){
         else{
             portfolio[stock]=new PortfolioAsset(stock, amount);
         }
-
+        console.log("Bought "+stock+" stock");
         //Remember the transaction in user's history
         user.transactions.push(new Transaction(stock, price, amount, "BOUGHT", Date.now()))
     }
