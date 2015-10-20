@@ -15,8 +15,9 @@ function SellIfStockGreaterThan(stock, value, quantityToSell){
 
             var marketPrice = market[stock].price;
             if (marketPrice > value) {
-                actions.sellStock(user, stock, marketPrice, this.quantity);
-                this.alreadyExecuted=true;
+                if(actions.sellStock(user, stock, marketPrice, this.quantity)){
+                    this.alreadyExecuted=true;
+                };
             }
         }
     };
@@ -37,8 +38,9 @@ function BuyIfStockLessThan(stock, value, quantityToBuy){
 
             var marketPrice=market[stock].price;
             if (marketPrice<value) {
-                actions.buyStock(user, stock, marketPrice, this.quantity);
-                this.alreadyExecuted=true;
+                if(actions.buyStock(user, stock, marketPrice, this.quantity)){
+                    this.alreadyExecuted=true;
+                };
             }
         }
     };
