@@ -1,13 +1,16 @@
 var index = require('./index');
+var stockapi = require('./stockapi');
 
 function searchUser(user, cb) {
 	users = index.users;
+	userInfo = null;
 	for(i = 0; i < users.length; i++){
 		console.log(users[i].name, user);
 		if(users[i].name == user){
-			cb(users[i]);
+			userInfo = users[i];
 		}
 	}
+	cb(userInfo);
 }
 
 function addStock(user, stock) {
@@ -32,8 +35,20 @@ function delStock(user, stock) {
 	})
 }
 
+function listUserStockInfo(tracking, res) {
+	var userStocks = new Array();
+	for(var key in tracking) {
+		userStocks.push(tracking[key]);
+	}
+	console.log(userStocks);
+	stockapi.getMultipleStocksInfo(userStocks, function(err, data){
+		res.end(JSON.stringify(data));
+	})
+}
+
 module.exports = {
 	searchUser: searchUser,
 	addStock: addStock,
-	delStock: delStock
+	delStock: delStock,
+	listUserStockInfo: listUserStockInfo
 }

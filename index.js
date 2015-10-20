@@ -55,9 +55,9 @@ function update(){
 
 function addTestVals(){
     var track = {
-        'AAPL': 'APPL',
+        'AAPL': 'AAPL',
         'MSFT': 'MSFT'
-    }
+    };
     var rules=[RuleBuilder.makeRule('AAPL', 500, 30, 'BUY'), RuleBuilder.makeRule('MSFT', 300, 10, 'SELL')];
     var portfolio={
         "$$MONEY": new PortfolioAsset("$$MONEY", 10000),
@@ -66,12 +66,13 @@ function addTestVals(){
     users.push(new User("Joe West", portfolio, track, rules ));
 }
 
-function saveToDatabase(){
-    //TODO save existing info to database
-};
-
-function loadFromDatabase(){
-    //TODO if we have a database, use this to load from it
+function addUser(name){
+    var track = {}; 
+    var rules = [];
+    var portfolio = {
+        "$$MONEY" : new PortfolioAsset("$$MONEY", 10000)
+    };
+    users.push(new User(name, portfolio, track, rules));
 }
 
 function stopProgram(){
@@ -84,5 +85,6 @@ module.exports={
     update: update,
     market: market,
     users: users,
-    stocklist: stocklist
+    stocklist: stocklist,
+    addUser: addUser
 }

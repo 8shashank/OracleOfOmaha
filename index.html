@@ -1,0 +1,56 @@
+<html>
+<body>
+	<form action="http://127.0.0.1:8080/getID" method="GET">
+		<body>
+			Enter in your ID to begin showing your stocks you've tracked
+		</body>
+		<br>
+		<input type="text" name="id" placeholder="Enter in your ID">
+		<input type="submit" value="Get acc info">
+	</form>
+	<br>
+	<form action = "http://127.0.0.1:8080/liststock" method = "GET">
+		<body>
+			Get a quote and data for a specific stock through its ticker symbol
+		</body>
+		<br>
+		<input type = "text" name="stockID" placeholder="Enter in a stock symbol">
+		<input type="submit" value = "Search">
+	</form>
+	<br>
+	<form action="http://127.0.0.1:8080/addStock" method="GET">
+		<body>
+			Add a stock to your list of stocks to track
+		</body>
+		<br>
+		<input type="text" name = "id" placeholder="Enter in ID">
+		<input type="text" name = "stocksymbol" placeholder="Enter stock symbol">
+		<input type="submit" value="Track Stock">
+	</form>
+	<br>
+	<form action="http://127.0.0.1:8080/removeStock" method="GET">
+		<body>
+			Remove a stock from your list of stocks to track
+		</body>
+		<br>
+		<input type="text" name = "id" placeholder="Enter in ID">
+		<input type="text" name = "stocksymbol" placeholder="Enter stock symbol">
+		<input type="submit" value="Remove Stock">
+	</form>
+	<br>
+	<form action="http://127.0.0.1:8080/trackRule" method="GET">
+		<body>
+			Add a rule to track for trading
+			Enter in your id, the stock symbol for the rule, "buy or sell" and price
+		</body>
+		<br>
+		<input type="text" name = "id" placeholder="Enter your ID">
+		<input type="text" name = "stockSymbol" placeholder="Enter stock symbol">
+		<input type="text" name = "buyOrSell" placeholder="Type buy or sell">
+		<input type="text" name = "price" placeholder="Price">
+		<input type="text" name = "quantity" placeholder="Quantity">
+		<input type="submit" value = "Track Rule">
+	</form>
+	<br>
+</body> 
+</html>
