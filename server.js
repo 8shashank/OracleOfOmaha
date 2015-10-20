@@ -88,7 +88,8 @@ app.get('/trackRule', function(req,res){
 		}
 	}
 	
-	price = parseInt(price);
+	price = parseFloat(price);
+	quantity = parseInt(quantity);
 	if(buyorsell.toUpperCase() === "BUY"){
 		userRules.push(rules.makeRule(stockSymbol, price, quantity, "BUY"));
 		res.end("You have added the rule for " + stockSymbol + ": BUY at price less than " + price);
