@@ -56,9 +56,15 @@ describe('Rules', function(){
             assert(testPortfolio.GOOG.amount == 210, 'Rule did not buy Google when its price was above 100');
             assert(testPortfolio['$$MONEY'].amount == 1000 - 50 * 10, 'Buyer did not pay the correct amount for their stocks');
         });
-    });
 
-    describe('Outlier cases', function(){
+        it('Rule should not be built when passed invalid action', function(){
+            var invalidRule=rules.makeRule('GOOG', 50,10,'YABADABADOO');
+            assert(invalidRule===null);
+
+            invalidRule=rules.makeRule('GOOG', 50, 10, '');
+            assert(invalidRule===null);
+        });
+
 
     });
 })
