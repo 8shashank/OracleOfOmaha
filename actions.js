@@ -26,7 +26,9 @@ function buyStock(user,stock, price, amount){
         console.log("Bought "+stock+" stock");
         //Remember the transaction in user's history
         user.transactions.push(new Transaction(stock, price, amount, "BOUGHT", Date.now()))
+        return true;
     }
+    return false;
 };
 
 //Function to call to sell stock
@@ -40,8 +42,10 @@ function sellStock(user, stock, price, amount){
     if(stockToSell && stockToSell.amount>=amount){
         stockToSell.amount-=amount;
         userBalance.amount+=totalSellPrice;
-        user.transactions.push(new Transaction(stock, price, amount, "SOLD", Date.now()))
+        user.transactions.push(new Transaction(stock, price, amount, "SOLD", Date.now()));
+        return true;
     }
+    return false;
 };
 
 
