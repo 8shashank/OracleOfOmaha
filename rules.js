@@ -11,7 +11,7 @@ function SellIfStockGreaterThan(stock, value, quantityToSell){
 
             var marketPrice=market[stock].price;
             if (marketPrice> value) {
-                actions.sellStock(user, stock, marketPrice, quantity);
+                actions.sellStock(user, stock, marketPrice, this.quantity);
             }
         }
     };

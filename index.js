@@ -10,7 +10,7 @@ var PortfolioAsset=models.PortfolioAsset;
 var database={};    //TODO decide if we are going to save to database or not
 var market={};      //Contains Stock objects
 var users=[];
-var stocklist=['AAPL', 'MSFT'];
+var stocklist=['AAPL', 'MSFT', 'GOOG'];
 
 //*** Functions to update market
 
