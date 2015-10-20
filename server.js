@@ -141,4 +141,4 @@ index.update();
 //Run the update function every 5 seconds from now on
 var runner=setInterval(index.update,5000);
 //Reset flags so that rules only executed once every 12 hours
-var ruleUpdater=setInterval(index.resetRuleFlags, 60*60*12);
+var ruleUpdater=setInterval(index.resetRuleFlags, 1000*60*60*12);
