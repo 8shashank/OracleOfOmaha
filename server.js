@@ -1,6 +1,6 @@
 var express = require('express');
 var app = express();
-var stockapis = require('./stockapi');
+var stockapi = require('./stockapi');
 var index = require('./index');
 var driver = require('./driver');
 
@@ -20,16 +20,34 @@ app.get('/getID', function (req, res) {
 
 // anyone can get/search for a stock quote using the stock ticker symbol
 app.get('/liststock', function (req, res){
-	response = req.query.stockID;
-	res.end(JSON.stringify(index.market[response]));
+	stock = req.query.stockID;
+	stockapi.getStockInfo(stock, function(err, data){
+		if(err){
+			res.end("Stock does not exist");
+		}
+		else {
+			res.end(JSON.stringify(data));
+		}
+	});
 });
 
 app.get('/addStock', function (req, res){
 	id = req.query.id;
 	stock = req.query.stocksymbol;
-	console.log(id,stock);
-	driver.addStock(id, stock);
-	res.end("You have added " + stock + " to your list of stocks to track. Go back to add more");
+	var cb= function(exists) {
+		if(!exists) {
+			res.end("This stock does not exist");
+		}
+		else{
+
+			console.log(id, stock);
+			driver.addStock(id, stock);
+			res.end("You have added " + stock + " to your list of stocks to track. Go back to add more");
+		}
+	}
+
+	checkValidStockAndCallback(stock, cb);
+
 });
 
 app.get('/removeStock', function (req,res){
@@ -49,7 +67,26 @@ app.get('/trackRule', function(req,res){
 	addRule(id, stockSymbol, buyorsell, price);
 
 	res.end("You have added the rule for " + stockSymbol + ": " + buyorsell + " price: " + price);
-})
+});
+
+function checkValidStockAndCallback(stock, cb) {
+	if(index.market[stock]){
+		console.log("Exists");
+		cb(true);
+	}
+	else{
+		stockapi.getStockInfo(stock, function(err, data){
+			//data.name is null when stock does not exist
+			if(data.name){
+				index.stocklist.push(stock);
+				cb(true);
+			}
+			else {
+				cb(false);
+			}
+		});
+	}
+}
 
 // could add these functions into another driver file after implementing
 // function to attain the account info of id from database

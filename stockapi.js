@@ -15,7 +15,7 @@ function getMultipleStocksInfo(symbols, cb){
     yahooFinance.snapshot({
         symbols: symbols,
         //Symbol, Name, Last Trade Price
-        
+
         // Commented out stuff: Ask(realtime), Bid(realtime), Dividend Yield,
         //P/E Ratio, 50-day Moving Average, 200-day Moving Average,
         //Percent Change From 200-day Moving Average, Percent Change From 50-day Moving Average
