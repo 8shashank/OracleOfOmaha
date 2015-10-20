@@ -39,7 +39,7 @@ function sellStock(user, stock, price, amount){
     //Check that stock exists in user's portfolio and that they have the amount they want to sell
     if(stockToSell && stockToSell.amount>=amount){
         stockToSell.amount-=amount;
-        userBalance+=totalSellPrice;
+        userBalance.amount+=totalSellPrice;
         user.transactions.push(new Transaction(stock, price, amount, "SOLD", Date.now()))
     }
 };

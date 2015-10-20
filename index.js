@@ -10,7 +10,7 @@ var PortfolioAsset=models.PortfolioAsset;
 var database={};    //TODO decide if we are going to save to database or not
 var market={};      //Contains Stock objects
 var users=[];
-var stocklist=['AAPL', 'MSFT'];
+var stocklist=['AAPL', 'MSFT', 'GOOG'];
 
 //*** Functions to update market
 
@@ -38,6 +38,14 @@ function updateMarket(data){
         console.log("Updated "+ stock["name"]);
     });
 }
+
+function resetRuleFlags(){
+    users.forEach(function(user){
+        user.rules.forEach(function(rule){
+            rule.alreadyExecuted=false;
+        })
+    })
+};
 
 //Updates entire application
 function update(){
@@ -83,6 +91,7 @@ function stopProgram(){
 module.exports={
     addTestVals: addTestVals,
     update: update,
+    resetRuleFlags: resetRuleFlags,
     market: market,
     users: users,
     stocklist: stocklist,
