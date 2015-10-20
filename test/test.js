@@ -65,6 +65,13 @@ describe('Rules', function(){
             assert(invalidRule===null);
         });
 
+        it('Rule should not buy when user does not have enough money', function(){
+            var rule=rules.makeRule('GOOG', 210, 3000, 'BUY');
+            assert.ok(rule, 'Rule builder returned null for valid request');
+            rule.execute(testUser,testMarket);
+            assert(testUser.portfolio.GOOG.amount===200);
+        })
+
 
     });
 })
