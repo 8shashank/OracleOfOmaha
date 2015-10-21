@@ -4,10 +4,34 @@ var stockapi = require('./stockapi');
 var index = require('./index');
 var driver = require('./driver');
 var rules = require('./rules');
+var path = require('path');
+var cors = require('cors');
+
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(cors());
 
 app.get('/', function (req, res) {
    res.sendFile( __dirname + "/" + "index.html" );
 });
+
+app.get('/addUser', function(req, res){
+	response = req.query.name;
+	index.addUser(response);
+	res.end(null);
+});
+
+app.get('/searchUser', function(req, res){
+	response = req.query.name;
+	var thisName = driver.searchUser(response, function(param){
+		if(param===null){
+			res.end("false");
+		}
+		else res.end("true");
+	});
+
+
+});
+
 
 // can use this to get user id, then query db for their stock info and stuff
 app.get('/getID', function (req, res) {
