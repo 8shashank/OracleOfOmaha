@@ -6,11 +6,11 @@
   "dependencies": {
     "cors": "^2.7.1",
     "express": "^4.13.3",
+    "lodash": "^3.10.1",
     "yahoo-finance": "^0.2.12"
   },
   "devDependencies": {
     "chai": "^3.3.0",
-    "lodash": "^3.10.1",
     "mocha": "^2.3.3"
   },
   "scripts": {
