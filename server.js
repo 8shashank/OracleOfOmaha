@@ -12,7 +12,7 @@ app.get('/', function (req, res) {
 // can use this to get user id, then query db for their stock info and stuff
 app.get('/getID', function (req, res) {
    response = req.query.id;
-   console.log(response);
+   //console.log(response);
    driver.searchUser(response, function(userData){
    		console.log(userData);  		
    		if(userData != null){
@@ -55,7 +55,7 @@ app.get('/addStock', function (req, res){
 		}
 		else{
 
-			console.log(id, stock);
+			//console.log(id, stock);
 			driver.addStock(id, stock);
 			res.end("You have added " + stock + " to your list of stocks to track. Go back to add more");
 		}
@@ -68,7 +68,7 @@ app.get('/addStock', function (req, res){
 app.get('/removeStock', function (req,res){
 	id = req.query.id;
 	stock = req.query.stocksymbol;
-	console.log(id, stock);
+	//console.log(id, stock);
 	driver.delStock(id, stock);
 	res.end("You have removed " + stock + " from your list of stocks to track");
 
@@ -95,12 +95,12 @@ app.get('/trackRule', function(req,res){
 			if(buyorsell.toUpperCase() === "BUY"){
 				userRules.push(rules.makeRule(stockSymbol, price, quantity, "BUY"));
 				res.end("You have added the rule for " + stockSymbol + ": BUY at price less than " + price);
-				console.log(userRules);
+				//console.log(userRules);
 			}
 			else if(buyorsell.toUpperCase() === "SELL"){
 				userRules.push(rules.makeRule(stockSymbol, price, quantity, "SELL"));
 				res.end("You have added the rule for " + stockSymbol + ": SELL at price greater than " + price);
-				console.log(userRules);
+				//console.log(userRules);
 
 			}
 			else{
@@ -113,17 +113,13 @@ app.get('/trackRule', function(req,res){
 });
 
 function checkValidStockAndCallback(stock, cb) {
-	console.log(stock);
 	if(index.market[stock]){
-		console.log("Exists");
+		//console.log("Exists");
 		cb(true);
 	}
 	else{
-		console.log("here");
 		stockapi.getStockInfo(stock, function(err, data){
 			//data.name is null when stock does not exist
-			console.log(data.name);
-			console.log("something")
 			if(data.name){
 				index.stocklist.push(stock);
 				cb(true);

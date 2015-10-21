@@ -105,20 +105,60 @@ describe('Driver', function(){
 
             driver.searchUser("John Doe", function(userData){
                 tracking = userData.track;
-                console.log(tracking);
                 assert(_.isEqual(tracking, correct));
             });
         });
+    })
 
-        it('should not add an invalid stock to the list of stocks a user is tracking', function(){
-            driver.addStock("John Doe", "INVALID");
-            correct = {};
+    describe('delStock', function(){
+
+        it('should delete a stock if it exists in the list of user stock tracking', function(){
+            driver.addStock("John Doe", "AAPL");
+            driver.addStock("John Doe", "MSFT");
+            driver.delStock("John Doe", "AAPL");
+            correct = {
+                MSFT: 'MSFT'
+            }
 
             driver.searchUser("John Doe", function(userData){
                 tracking = userData.track;
-                console.log(tracking);
                 assert(_.isEqual(tracking, correct));
             })
+
+
+        });
+
+        it('should not delete a stock if it does not exist in the list of user stock tracking', function(){
+            driver.addStock("John Doe", "AAPL");
+            driver.delStock("John Doe", "MSFT");
+            correct = {
+                AAPL: 'AAPL'
+            }
+
+            driver.searchUser("John Doe", function(userData){
+                tracking = userData.track;
+                assert(_.isEqual(tracking, correct));
+            });
         })
+
+        it('should not delete a stock if it is invalid', function(){
+            driver.addStock("John Doe", "AAPL");
+            driver.delStock("John Doe", "INVALID");
+
+            correct = {
+                AAPL: 'AAPL'
+            }
+
+            driver.searchUser("John Doe", function(userData){
+                tracking = userData.track;
+                assert(_.isEqual(tracking, correct));
+            })
+
+        })
+    });
+
+
+    describe('listUserStockInfo', function(){
+
     })
 });
