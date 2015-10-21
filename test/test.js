@@ -1,6 +1,7 @@
 var assert = require('assert');
 var models=require('../models')
 var rules=require('../rules');
+var _ = require('lodash');
 
 describe('Rules', function(){
 
@@ -64,7 +65,60 @@ describe('Rules', function(){
             invalidRule=rules.makeRule('GOOG', 50, 10, '');
             assert(invalidRule===null);
         });
-
-
     });
-})
+});
+
+describe('Driver', function(){
+    var driver = require('../driver');
+    var index = require('../index');
+
+    beforeEach(function(){
+        index.addUser("John Doe");
+        index.addUser("Jane Doe");
+    });
+
+    describe('searchUser', function(){
+
+        it('should return the user portfolio if the user exists', function(){
+            driver.searchUser("John Doe", function(userData){
+                assert(userData !== null);
+            });
+            driver.searchUser("Jane Doe", function(userData){
+                assert(userData !== null);
+            });
+        });
+
+        it('should return portfolio as null if the user does not exist', function(){
+            driver.searchUser("Invalid User", function(userData){
+                assert(userData === null);
+            });
+        });
+    });
+
+    describe('addStock', function(){
+
+        it('should add a valid stock to the list of stocks a user is tracking', function(){
+            driver.addStock("John Doe", "GOOG");
+            correct = {
+                GOOG: 'GOOG'
+            }
+
+            driver.searchUser("John Doe", function(userData){
+                tracking = userData.track;
+                console.log(tracking);
+                assert(_.isEqual(tracking, correct));
+            });
+        });
+
+        it('should not add an invalid stock to the list of stocks a user is tracking', function(){
+            driver.addStock("John Doe", "INVALID");
+            correct = {};
+
+            driver.searchUser("John Doe", function(userData){
+                tracking = userData.track;
+                console.log(tracking);
+                assert(_.isEqual(tracking, correct));
+            })
+        })
+    })
+});

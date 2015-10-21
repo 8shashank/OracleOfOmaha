@@ -1,11 +1,12 @@
 var index = require('./index');
 var stockapi = require('./stockapi');
+var server = require('./server');
 
 function searchUser(user, cb) {
 	users = index.users;
 	userInfo = null;
 	for(i = 0; i < users.length; i++){
-		console.log(users[i].name, user);
+		//console.log(users[i].name, user);
 		if(users[i].name == user){
 			userInfo = users[i];
 		}
@@ -14,14 +15,20 @@ function searchUser(user, cb) {
 }
 
 function addStock(user, stock) {
-	searchUser(user, function(userData){
-		track = userData.track;
-		console.log(track);
-		if(!track[stock]){
-			track[stock] = stock;
+	server.checkValidStockAndCallback(stock, function(valid){
+		if(valid){
+			searchUser(user, function(userData){
+				if(userData !== null){
+					track = userData.track;
+					console.log(track);
+					if(!track[stock]){
+						track[stock] = stock;
+					}
+					console.log(track);
+				}
+			});
 		}
-		console.log(track);
-	});
+	})
 }
 
 function delStock(user, stock) {

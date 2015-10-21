@@ -113,13 +113,17 @@ app.get('/trackRule', function(req,res){
 });
 
 function checkValidStockAndCallback(stock, cb) {
+	console.log(stock);
 	if(index.market[stock]){
 		console.log("Exists");
 		cb(true);
 	}
 	else{
+		console.log("here");
 		stockapi.getStockInfo(stock, function(err, data){
 			//data.name is null when stock does not exist
+			console.log(data.name);
+			console.log("something")
 			if(data.name){
 				index.stocklist.push(stock);
 				cb(true);
@@ -142,3 +146,7 @@ index.update();
 var runner=setInterval(index.update,5000);
 //Reset flags so that rules only executed once every 12 hours
 var ruleUpdater=setInterval(index.resetRuleFlags, 1000*60*60*12);
+
+module.exports = {
+	checkValidStockAndCallback: checkValidStockAndCallback
+}
