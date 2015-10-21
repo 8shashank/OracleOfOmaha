@@ -4,14 +4,20 @@ function SellIfStockGreaterThan(stock, value, quantityToSell){
     this.value=value;
     this.stock=stock;
     this.quantity=quantityToSell;
+    this.alreadyExecuted=false;
 
     this.execute= function(user, market){
+        if(this.alreadyExecuted) {
+            return;
+        }
         //Sanity check to make sure variables exist
-        if(user.portfolio[stock] && market[stock]) {
+        if (user.portfolio[stock] && market[stock]) {
 
-            var marketPrice=market[stock].price;
-            if (marketPrice> value) {
-                actions.sellStock(user, stock, marketPrice, quantity);
+            var marketPrice = market[stock].price;
+            if (marketPrice > value) {
+                if(actions.sellStock(user, stock, marketPrice, this.quantity)){
+                    this.alreadyExecuted=true;
+                };
             }
         }
     };
@@ -21,15 +27,20 @@ function BuyIfStockLessThan(stock, value, quantityToBuy){
     this.value=value;
     this.stock=stock;
     this.quantity=quantityToBuy;
+    this.alreadyExecuted=false;
 
     this.execute=function(user, market){
-
+        if(this.alreadyExecuted) {
+            return;
+        }
         //Sanity check to make sure variables exist
-        if(user.portfolio[stock] && market[stock]) {
+        if(market[stock]) {
 
             var marketPrice=market[stock].price;
             if (marketPrice<value) {
-                actions.buyStock(user, stock, marketPrice, this.quantity);
+                if(actions.buyStock(user, stock, marketPrice, this.quantity)){
+                    this.alreadyExecuted=true;
+                };
             }
         }
     };

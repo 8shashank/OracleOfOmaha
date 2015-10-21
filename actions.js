@@ -1,7 +1,7 @@
 var models=require('./models');
 var Stock=models.Stock;
 var Transaction=models.Transaction;
-
+var PortfolioAsset=models.PortfolioAsset;
 var moneyAsset="$$MONEY";       //Constant
 
 //Function to call to buy stock
@@ -23,10 +23,12 @@ function buyStock(user,stock, price, amount){
         else{
             portfolio[stock]=new PortfolioAsset(stock, amount);
         }
-
+        console.log("Bought "+stock+" stock");
         //Remember the transaction in user's history
         user.transactions.push(new Transaction(stock, price, amount, "BOUGHT", Date.now()))
+        return true;
     }
+    return false;
 };
 
 //Function to call to sell stock
@@ -39,9 +41,11 @@ function sellStock(user, stock, price, amount){
     //Check that stock exists in user's portfolio and that they have the amount they want to sell
     if(stockToSell && stockToSell.amount>=amount){
         stockToSell.amount-=amount;
-        userBalance+=totalSellPrice;
-        user.transactions.push(new Transaction(stock, price, amount, "SOLD", Date.now()))
+        userBalance.amount+=totalSellPrice;
+        user.transactions.push(new Transaction(stock, price, amount, "SOLD", Date.now()));
+        return true;
     }
+    return false;
 };
 
 
