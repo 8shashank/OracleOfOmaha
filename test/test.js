@@ -1,6 +1,7 @@
 var assert = require('assert');
 var models=require('../models')
 var rules=require('../rules');
+var _ = require('lodash');
 
 describe('Actions', function(){
     var testPortfolio = {};
@@ -86,6 +87,97 @@ describe('Actions', function(){
     });
 
 });
+            
+
+describe('Driver', function(){
+    var driver = require('../driver');
+    var index = require('../index');
+
+    beforeEach(function(){
+        index.addUser("John Doe");
+        index.addUser("Jane Doe");
+    });
+
+    describe('searchUser', function(){
+
+        it('should return the user portfolio if the user exists', function(){
+            driver.searchUser("John Doe", function(userData){
+                assert(userData !== null);
+            });
+            driver.searchUser("Jane Doe", function(userData){
+                assert(userData !== null);
+            });
+        });
+
+        it('should return portfolio as null if the user does not exist', function(){
+            driver.searchUser("Invalid User", function(userData){
+                assert(userData === null);
+            });
+        });
+    });
+
+    describe('addStock', function(){
+
+        it('should add a valid stock to the list of stocks a user is tracking', function(){
+            driver.addStock("John Doe", "GOOG");
+            correct = {
+                GOOG: 'GOOG'
+            }
+
+            driver.searchUser("John Doe", function(userData){
+                tracking = userData.track;
+                assert(_.isEqual(tracking, correct));
+            });
+        });
+    })
+
+    describe('delStock', function(){
+
+        it('should delete a stock if it exists in the list of user stock tracking', function(){
+            driver.addStock("John Doe", "AAPL");
+            driver.addStock("John Doe", "MSFT");
+            driver.delStock("John Doe", "AAPL");
+            correct = {
+                MSFT: 'MSFT'
+            }
+
+            driver.searchUser("John Doe", function(userData){
+                tracking = userData.track;
+                assert(_.isEqual(tracking, correct));
+            })
+
+
+        });
+
+        it('should not delete a stock if it does not exist in the list of user stock tracking', function(){
+            driver.addStock("John Doe", "AAPL");
+            driver.delStock("John Doe", "MSFT");
+            correct = {
+                AAPL: 'AAPL'
+            }
+
+            driver.searchUser("John Doe", function(userData){
+                tracking = userData.track;
+                assert(_.isEqual(tracking, correct));
+            });
+        })
+
+        it('should not delete a stock if it is invalid', function(){
+            driver.addStock("John Doe", "AAPL");
+            driver.delStock("John Doe", "INVALID");
+
+            correct = {
+                AAPL: 'AAPL'
+            }
+
+            driver.searchUser("John Doe", function(userData){
+                tracking = userData.track;
+                assert(_.isEqual(tracking, correct));
+            })
+
+        })
+    });
+});
 
 describe('Rules', function(){
     var testPortfolio = {};
@@ -162,5 +254,4 @@ describe('Rules', function(){
         buyGoogOnceRule.execute(testUser, testMarket);
         assert(testUser.portfolio.GOOG.amount===prevAmount+2, "Rule executed twice");
     });
-
 });
