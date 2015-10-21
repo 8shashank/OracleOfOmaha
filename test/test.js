@@ -3,8 +3,90 @@ var models=require('../models')
 var rules=require('../rules');
 
 describe('Actions', function(){
+    var testPortfolio = {};
+    var testUser = {};
+    var testMarket = {};
+    var actions=require('../actions');
+
+    describe('Buy Stock', function(){
+        beforeEach(function () {
+            testPortfolio = {
+                'GOOG': new models.PortfolioAsset('GOOG', 200),
+                'MSFT': new models.PortfolioAsset('MSFT', 100),
+                '$$MONEY': new models.PortfolioAsset('$$MONEY', 1000)
+            };
+            testUser = new models.User('Joe', testPortfolio, [], []);
+        });
+
+        it('Should buy and update stock in user portfolio', function(){
+            var prevAmount=testPortfolio.MSFT.amount;
+            var prevBalance=testPortfolio.$$MONEY.amount;
+            actions.buyStock(testUser,'MSFT', 10, 12);
+            assert(testPortfolio.MSFT.amount===prevAmount+12);
+
+            var sellPrice=10*12;
+            assert(testPortfolio.$$MONEY.amount===prevBalance-sellPrice);
+        });
+
+        it('Should buy and create new portfolio asset for user if did not previously exist', function(){
+            var prevBalance=testPortfolio.$$MONEY.amount;
+            actions.buyStock(testUser,'AAPL', 10, 12);
+            var sellPrice=10*12;
+            assert(testPortfolio.AAPL.amount===12);
+            assert(testPortfolio.$$MONEY.amount===prevBalance-sellPrice);
+        });
+
+        it('Should not buy stock if user does not have enough funds', function(){
+            var prevBalance=testPortfolio.$$MONEY.amount;
+            var prevAmount=testPortfolio.MSFT.amount;
+
+            actions.buyStock(testUser,'AAPL',1000,10000);
+            assert(testPortfolio.AAPL==undefined, "Should not have bought AAPL stock with insufficient funds");
+            assert(testPortfolio.$$MONEY.amount===prevBalance);
+
+            actions.buyStock(testUser,'MSFT',1000,1000);
+            assert(testPortfolio.MSFT.amount===prevAmount,"Should not have bought MSFT stock with insufficient funds");
+            assert(testPortfolio.$$MONEY.amount===prevBalance);
+        });
+    });
+
+    describe('Sell Stock', function(){
+        beforeEach(function () {
+            testPortfolio = {
+                'GOOG': new models.PortfolioAsset('GOOG', 200),
+                'MSFT': new models.PortfolioAsset('MSFT', 100),
+                '$$MONEY': new models.PortfolioAsset('$$MONEY', 1000)
+            };
+            testUser = new models.User('Joe', testPortfolio, [], []);
+        });
+
+        it('Should sell and update stock in user portfolio', function(){
+            var prevAmount=testPortfolio.MSFT.amount;
+            var prevBalance=testPortfolio.$$MONEY.amount;
+
+            actions.sellStock(testUser,'MSFT', 10, 12);
+            assert(testPortfolio.MSFT.amount===prevAmount-12);
+            var totalSellPrice=10*12;
+            assert(testPortfolio.$$MONEY.amount===prevBalance+totalSellPrice);
+        });
+
+        it('Should not change stock/money for user if they did not have that stock', function(){
+            actions.sellStock(testUser,'AAPL', 10, 12);
+            assert(testPortfolio.AAPL==undefined);
+        });
+
+        it('Should not sell stock if user does not have the amount they wanted to sell', function(){
+            var prevAmount=testPortfolio.MSFT.amount;
+            actions.sellStock(testUser,'MSFT',1000,10000);
+            assert(testPortfolio.MSFT.amount==prevAmount, "Should not have sold MSFT");
+
+            actions.buyStock(testUser,'AAPL',1000,1000);
+            assert(testPortfolio.AAPL==undefined);
+        });
+    });
 
 });
+
 describe('Rules', function(){
     var testPortfolio = {};
     var testUser = {};
@@ -24,13 +106,13 @@ describe('Rules', function(){
     });
 
     it('Rule should sell stock when value goes above amount', function () {
+        var prevAmount=testPortfolio.GOOG.amount;
         var sellGoogIfMoreThan100Rule = rules.makeRule('GOOG', 100, 10, 'SELL');
         assert.ok(sellGoogIfMoreThan100Rule, "Rule builder returned null for valid request");
 
         testUser.rules.push(sellGoogIfMoreThan100Rule);
 
         sellGoogIfMoreThan100Rule.execute(testUser, testMarket);
-
         assert(testPortfolio.GOOG.amount == 200, 'Rule sold Google when its price was below 100');
 
         testMarket.GOOG.price = 110;
