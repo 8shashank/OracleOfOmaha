@@ -36,7 +36,7 @@ app.get('/searchUser', function(req, res){
 // can use this to get user id, then query db for their stock info and stuff
 app.get('/getID', function (req, res) {
    response = req.query.id;
-   console.log(response);
+   //console.log(response);
    driver.searchUser(response, function(userData){
    		console.log(userData);  		
    		if(userData != null){
@@ -79,7 +79,7 @@ app.get('/addStock', function (req, res){
 		}
 		else{
 
-			console.log(id, stock);
+			//console.log(id, stock);
 			driver.addStock(id, stock);
 			res.end("You have added " + stock + " to your list of stocks to track. Go back to add more");
 		}
@@ -92,7 +92,7 @@ app.get('/addStock', function (req, res){
 app.get('/removeStock', function (req,res){
 	id = req.query.id;
 	stock = req.query.stocksymbol;
-	console.log(id, stock);
+	//console.log(id, stock);
 	driver.delStock(id, stock);
 	res.end("You have removed " + stock + " from your list of stocks to track");
 
@@ -102,36 +102,43 @@ app.get('/trackRule', function(req,res){
 	id = req.query.id;
 	stockSymbol = req.query.stockSymbol;
 	buyorsell = req.query.buyOrSell;
-	price = req.query.price;
-	quantity = req.query.quantity;
-	users = index.users;
+	price = parseInt(req.query.price);
+	quantity = parseInt(req.query.quantity);
 
-	for(var i = 0; i < users.length; i++){
-		if(users[i].name === id){
-			userRules = users[i].rules;
+	var cb= function(exists) {
+		if(!exists) {
+			res.end("This stock does not exist");
 		}
-	}
-	
-	price = parseInt(price);
-	if(buyorsell.toUpperCase() === "BUY"){
-		userRules.push(rules.makeRule(stockSymbol, price, quantity, "BUY"));
-		res.end("You have added the rule for " + stockSymbol + ": BUY at price less than " + price);
-		console.log(userRules);
-	}
-	else if(buyorsell.toUpperCase() === "SELL"){
-		userRules.push(rules.makeRule(stockSymbol, price, quantity, "SELL"));
-		res.end("You have added the rule for " + stockSymbol + ": SELL at price greater than " + price);
-		console.log(userRules);
+		else{
+			users = index.users;
+			for(var i = 0; i < users.length; i++){
+				if(users[i].name === id){
+					userRules = users[i].rules;
+				}
+			}
+			if(buyorsell.toUpperCase() === "BUY"){
+				userRules.push(rules.makeRule(stockSymbol, price, quantity, "BUY"));
+				res.end("You have added the rule for " + stockSymbol + ": BUY at price less than " + price);
+				//console.log(userRules);
+			}
+			else if(buyorsell.toUpperCase() === "SELL"){
+				userRules.push(rules.makeRule(stockSymbol, price, quantity, "SELL"));
+				res.end("You have added the rule for " + stockSymbol + ": SELL at price greater than " + price);
+				//console.log(userRules);
 
-	}
-	else{
-		res.end("Please enter a valid command(BUY or SELL)");
-	}
+			}
+			else{
+				res.end("Please enter a valid command(BUY or SELL)");
+			}
+		}
+	};
+
+	checkValidStockAndCallback(stockSymbol, cb);
 });
 
 function checkValidStockAndCallback(stock, cb) {
 	if(index.market[stock]){
-		console.log("Exists");
+		//console.log("Exists");
 		cb(true);
 	}
 	else{
@@ -158,4 +165,8 @@ index.update();
 //Run the update function every 5 seconds from now on
 var runner=setInterval(index.update,5000);
 //Reset flags so that rules only executed once every 12 hours
-var ruleUpdater=setInterval(index.resetRuleFlags, 60*60*12);
+var ruleUpdater=setInterval(index.resetRuleFlags, 1000*60*60*12);
+
+module.exports = {
+	checkValidStockAndCallback: checkValidStockAndCallback
+}
