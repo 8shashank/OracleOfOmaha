@@ -120,6 +120,7 @@ button{
 
 #warren{
     border-radius: 5px;
+    height: 400px;
 }
 
 #subtitle{
@@ -136,4 +137,26 @@ button{
     float: right;
     background-color: lightsteelblue;
     width: 20%;
+}
+
+#stockQuoteBox{
+    background-color: lightgreen;
+}
+
+#showStocksID, #addStockID, #rmStockID, #addRuleID{
+    background-color: lightpink;
+}
+
+#displayWindow{
+    background-color: rgba(95, 158, 160, 0.5);
+    border-radius: 5px;
+    margin: auto;
+    height: 400px;
+    width: 100%;
+}
+
+.centered{
+    height: 400px;
+    align-items: center;
+    justify-content: center;
 }
