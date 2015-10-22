@@ -4,7 +4,7 @@ track different stocks and see their values at any given time. On sign up, the u
 fixed amount of cash that they can use to trade.
 
 #Details
-The bots trade every five seconds when the stock information updates. The rules are easy to set up. A rule can only be
+The bots trade every five seconds when the stock information updates. A rule can only be
 satisfied once within a time span of 12 hours. This prevents the situation when the bot keeps on buying a fixed amount
  until the user is out of cash.
 
