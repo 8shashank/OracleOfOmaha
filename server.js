@@ -78,7 +78,6 @@ app.get('/addStock', function (req, res){
 			res.end("This stock does not exist");
 		}
 		else{
-
 			//console.log(id, stock);
 			driver.addStock(id, stock);
 			res.end("You have added " + stock + " to your list of stocks to track. Go back to add more");

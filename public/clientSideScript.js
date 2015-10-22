@@ -5,12 +5,14 @@
 var loggedIn = false; //stores if someone is logged in
 var whoIsLoggedIn = null; //if someone is logged in, stores that user's identity
 
+/* AJAX request function that doesn't require response */
 function getPage(url) {
     var httpRequest = new XMLHttpRequest();
     httpRequest.open("GET", url, true);
     httpRequest.send(null);
 }
 
+/* AJAX request function that requires response */
 function getPageWithCallback(url, callback) {
     var httpRequest = new XMLHttpRequest();
     httpRequest.onreadystatechange = function() {
@@ -22,6 +24,21 @@ function getPageWithCallback(url, callback) {
     httpRequest.send(null);
 }
 
+/* Function invoked by show stocks button */
+function showStocks(){
+    getPageWithCallback("http://127.0.0.1:8080/getID?id=" + whoIsLoggedIn, function(flag){
+
+        var myNode = document.getElementById("displayWindow");
+        while (myNode.firstChild) {
+            myNode.removeChild(myNode.firstChild);
+        }
+        var textNode = document.createTextNode(flag);
+        myNode.appendChild(textNode);
+
+    });
+}
+
+/* Function invoked by get quote button */
 function getQuote(stock){
     var stockJSON;
     getPageWithCallback("http://127.0.0.1:8080/liststock?stockID=" + stock, function(flag){
@@ -36,19 +53,31 @@ function getQuote(stock){
     });
 }
 
-function showStocks(){
-    getPageWithCallback("http://127.0.0.1:8080/getID?id=" + whoIsLoggedIn, function(flag){
-
+/* Function invoked by add stock button */
+function addStock(stock){
+    getPageWithCallback("http://127.0.0.1:8080/addStock?id=" + whoIsLoggedIn + "&stocksymbol=" + stock, function(flag){
         var myNode = document.getElementById("displayWindow");
         while (myNode.firstChild) {
             myNode.removeChild(myNode.firstChild);
         }
-        var textNode = document.createTextNode(flag);
+        var textNode = document.createTextNode("You have added stock " + stock + " to your portfolio.");
         myNode.appendChild(textNode);
-
     });
 }
 
+/* Function invoked by rm stock button */
+function rmStock(stock){
+    getPageWithCallback("http://127.0.0.1:8080/removeStock?id=" + whoIsLoggedIn + "&stocksymbol=" + stock, function(flag){
+        var myNode = document.getElementById("displayWindow");
+        while (myNode.firstChild) {
+            myNode.removeChild(myNode.firstChild);
+        }
+        var textNode = document.createTextNode("You have removed stock " + stock + " from your portfolio.");
+        myNode.appendChild(textNode);
+    });
+}
+
+/* Function invoked by sign up button */
 function signUp(){
     var name = prompt("Enter your name", "");
     if (name === "") {
@@ -63,6 +92,7 @@ function signUp(){
     alert(name + ", you are now signed up. Now go make some great deals!");
 }
 
+/* Function invoked by log in button */
 function logIn(){
     if(loggedIn){
         whoIsLoggedIn = null;
