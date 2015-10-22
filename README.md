@@ -13,11 +13,17 @@ The project uses the Yahoo Finance API to get real-time stock information.
 
 #How to set up
 Node.js has to be installed on the user's machine to run this project. First do 
+
     npm install
+    
 to install all the dependencies. Then run
+
     node server.js
+    
 to run the project. Then go to 
+
     localhost:8080 
+    
 to access the application. To add a new user, use the Sign Up link, or 
 play around with the account of the test user 'Joe West'. From here, you can now check the balance, add or remove rules,
 and track different stocks for any of the bots you wish.
