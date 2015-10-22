@@ -1,17 +1,12 @@
 /**
  * Client side script for the OracleOfOmaha web engine
- * Created by Lawrence Waller on 10/21/15.
+ * Created by Lawrence Waller.
+ * NOTE: there are not mocha tests for this code because it is client-side JavaScript using AJAX calls, not node
+ * The "tests" consist of using the functionality in the GUI within the browser
  */
 
 var loggedIn = false; //stores if someone is logged in
 var whoIsLoggedIn = null; //if someone is logged in, stores that user's identity
-
-/* AJAX request function that doesn't require response */
-function getPage(url) {
-    var httpRequest = new XMLHttpRequest();
-    httpRequest.open("GET", url, true);
-    httpRequest.send(null);
-}
 
 /* AJAX request function that requires response */
 function getPageWithCallback(url, callback) {
@@ -44,13 +39,35 @@ function getQuote(stock){
     var stockJSON;
     getPageWithCallback("http://127.0.0.1:8080/liststock?stockID=" + stock, function(flag){
         stockJSON = JSON.parse(flag);
-
         var myNode = document.getElementById("displayWindow");
         while (myNode.firstChild) {
             myNode.removeChild(myNode.firstChild);
         }
-        var textNode = document.createTextNode(stockJSON.name + ": $" + stockJSON.lastTradePriceOnly + " per share as of " + new Date());
-        myNode.appendChild(textNode);
+        var mainDiv = document.createElement("div");
+        mainDiv.className = "centered"; /* invokes a css section I have set aside in oracleStyle.css */
+        myNode.appendChild(mainDiv);
+        mainDiv.appendChild(document.createElement("br"));
+        var title= document.createElement("span");
+        title.style.fontSize = "3em";
+        title.appendChild(document.createTextNode(stockJSON.name));
+        mainDiv.appendChild(title);
+        mainDiv.appendChild(document.createElement("br"));
+        mainDiv.appendChild(document.createElement("br"));
+        var priceDiv = document.createElement("div");
+        priceDiv.style.backgroundColor = "lightpink";
+        priceDiv.style.display = "inline-block";
+        priceDiv.style.padding = "5px";
+        priceDiv.style.border = "black";
+        priceDiv.style.border = "ridge";
+        priceDiv.style.borderWidth = "5px";
+        priceDiv.style.borderRadius = "5px";
+        priceDiv.style.margin= "0 auto";
+        priceDiv.style.marginBottom = "20px";
+        priceDiv.style.fontSize = "5em";
+        priceDiv.appendChild(document.createTextNode("$" + stockJSON.lastTradePriceOnly.toFixed(2)));
+        mainDiv.appendChild(priceDiv);
+        mainDiv.appendChild(document.createElement("br"));
+        mainDiv.appendChild(document.createTextNode("price per share as of " + new Date()));
     });
 }
 
@@ -61,7 +78,7 @@ function addStock(stock){
         while (myNode.firstChild) {
             myNode.removeChild(myNode.firstChild);
         }
-        var textNode = document.createTextNode("You have added stock " + stock + " to your portfolio.");
+        var textNode = document.createTextNode("You have begun tracking stock " + stock + ".");
         myNode.appendChild(textNode);
     });
 }
@@ -73,7 +90,7 @@ function rmStock(stock){
         while (myNode.firstChild) {
             myNode.removeChild(myNode.firstChild);
         }
-        var textNode = document.createTextNode("You have removed stock " + stock + " from your portfolio.");
+        var textNode = document.createTextNode("You have removed stock " + stock + " from your tracking portfolio.");
         myNode.appendChild(textNode);
     });
 }
@@ -108,8 +125,16 @@ function signUp(){
         alert('Maybe another time, then.');
         return;
     }
-    getPage("http://127.0.0.1:8080/addUser?name=" + name);
-    alert(name + ", you are now signed up. Now go make some great deals!");
+    getPageWithCallback("http://127.0.0.1:8080/addUser?name=" + name, function(response){
+        alert(response);
+        if(response==="false"){
+            alert(name + ", you are now signed up. Now go make some great deals!");
+        }
+        else{
+            alert("A user with name " + name + " already exists. Log in at right or choose a different sign-up name.");
+        }
+    });
+
 }
 
 
@@ -144,6 +169,16 @@ function enableDisableForms(enable){
     else{
         color = 'lightpink';
         box1.value = box2.value = box3.value = box4.value = "Log in to enable";
+
+        //we don't want to leave sensitive information in the display field, so replace with the Warren Buffett placeholder img
+        var displayWindow = document.getElementById("displayWindow");
+        while (displayWindow.firstChild) {
+            displayWindow.removeChild(displayWindow.firstChild);
+        }
+        var warren = document.createElement("img");
+        warren.setAttribute('src', 'http://www.gannett-cdn.com/-mm-/1044cc33457dc55ab3882b134911cd284004350d/c=161-0-4757-3456&r=x404&c=534x401/local/-/media/USATODAY/USATODAY/2014/12/04/635533104145735711-AP-Earns-Berkshire-Hathaway.jpg');
+        warren.style.borderRadius = "5px";
+        displayWindow.appendChild(warren);
     }
 
     //change color of login-dependent forms

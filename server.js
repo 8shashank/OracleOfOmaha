@@ -16,8 +16,14 @@ app.get('/', function (req, res) {
 
 app.get('/addUser', function(req, res){
 	response = req.query.name;
-	index.addUser(response);
-	res.end(null);
+
+	var thisName = driver.searchUser(response, function(param){
+		if(param===null){
+			index.addUser(response); //only adds the user if their name is not already in the system
+			res.end("false");
+		}
+		else res.end("true");
+	});
 });
 
 app.get('/searchUser', function(req, res){
