@@ -49,6 +49,13 @@ function getQuote(stock){
         mainDiv.appendChild(document.createElement("br"));
         var title= document.createElement("span");
         title.style.fontSize = "3em";
+
+        //this escape clause is invoked in case the user entered a stock that does not exist.
+        if(stockJSON.name === null){
+            title.appendChild(document.createTextNode("That stock does not exist."));
+            mainDiv.appendChild(title);
+            return;
+        }
         title.appendChild(document.createTextNode(stockJSON.name));
         mainDiv.appendChild(title);
         mainDiv.appendChild(document.createElement("br"));
@@ -126,7 +133,6 @@ function signUp(){
         return;
     }
     getPageWithCallback("http://127.0.0.1:8080/addUser?name=" + name, function(response){
-        alert(response);
         if(response==="false"){
             alert(name + ", you are now signed up. Now go make some great deals!");
         }
