@@ -1,107 +1,48 @@
 <!DOCTYPE html>
-
 <html>
-
 <head>
 	<title>Oracle of Omaha: A Stock Tracker and Trader of the Highest Quality</title>
 	<link rel="stylesheet" href="oracleStyle.css" type="text/css">
-
+	<script src="clientSideScript.js" type="text/javascript"></script>
 </head>
-
 <body>
+
 	<header>
 		<hgroup class="heading">
 			<h1>Oracle of Omaha</h1>
-			<h3 class="subheading">"Price is what you pay. Value is what you get."</h3>
+			<h3 class="subheading">"Price is what you pay. Value is what you get." --Warren Buffett</h3>
 		</hgroup>
 		<div>
 			<button id="viewTutorialButton" onclick="signUp()">Sign Up</button>
-			<h2 id="subtitle">An Algorithmic Stock Trading and Market Analysis Suite</h2>
+			<h2 id="subtitle">An Algorithmic Stock Trading and Market Analysis Suite<br>
+				that allows you to...
+			</h2>
 			<button id="logInOutButton" onclick="logIn()">Log In</button>
 		</div>
-
-		<script>
-			function getPage(url) {
-				var httpRequest = new XMLHttpRequest();
-				httpRequest.open("GET", url, true);
-				httpRequest.send(null);
-			}
-
-			function getPageWithCallback(url, callback) {
-				var httpRequest = new XMLHttpRequest();
-				httpRequest.onreadystatechange = function() {
-					if (httpRequest.readyState == 4 && httpRequest.status == 200)
-						callback(httpRequest.responseText);
-				}
-
-				httpRequest.open("GET", url, true);
-				httpRequest.send(null);
-			}
-
-			function signUp(){
-				var name = prompt("Enter your name", "");
-				if (name === "") {
-					alert('Fill out the form properly, please!');
-					signUp();
-				}
-				if (name === null){
-					alert('Maybe another time, then.');
-					return;
-				}
-
-				console.log("hello");
-				getPage("http://127.0.0.1:8080/addUser?name=" + name);
-			}
-			function logIn(){
-				var name = prompt("Enter your name", "");
-				if (name === "") {
-					alert('Fill out the form properly, please!');
-					signUp();
-				}
-				if (name === null){
-					alert('Maybe another time, then.');
-					return;
-				}
-
-				var boolean;
-
-				getPageWithCallback("http://127.0.0.1:8080/searchUser?name=" + name, function(flag){
-					if(flag==="true"){
-						boolean = true;
-					}
-					else{
-						boolean = false;
-					}
-
-					alert(boolean);
-				});
-
-			}
-		</script>
-
 	</header>
 
 	<div class="boxes">
 		<div class="boxID">
-			<form action="http://127.0.0.1:8080/getID" method="GET">
+			<!--<form action="http://127.0.0.1:8080/getID" method="GET">-->
 				<body>
-					Enter in your ID to begin showing your stocks you've tracked
+					Show the stocks you are tracking
 				</body>
 				<br>
-				<input type="text" name="id" placeholder="Enter in your ID">
-				<input type="submit" value="Get acc info">
-			</form>
+				<!--<input type="text" name="id" placeholder="Enter in your ID">-->
+				<input id="logInToShowStocks" type="submit" value="Log in to show your portfolio"
+					   onclick="showStocks()" disabled>
+			<!--</form>-->
 			<br>
 		</div>
-		<div class="boxGetQuote">
-			<form action = "http://127.0.0.1:8080/liststock" method = "GET">
+		<div id="stockQuoteBox" class="boxGetQuote">
+			<!--<form action = "http://127.0.0.1:8080/liststock" method = "GET">-->
 				<body>
 					Get a quote and data for a specific stock through its ticker symbol
 				</body>
 				<br>
-				<input type = "text" name="stockID" placeholder="Enter in a stock symbol">
-				<input type="submit" value = "Search">
-			</form>
+				<input id="myID" type = "text" name="stockID" placeholder="Enter in a stock symbol">
+				<input type="submit" value = "Try it now!" onclick="getQuote(document.getElementById('myID').value)">
+			<!--</form>-->
 			<br>
 		</div>
 		<div class="boxAddStock">
@@ -110,9 +51,9 @@
 					Add a stock to your list of stocks to track
 				</body>
 				<br>
-				<input type="text" name = "id" placeholder="Enter in ID">
+				<!--<input type="text" name = "id" placeholder="Enter in ID">-->
 				<input type="text" name = "stocksymbol" placeholder="Enter stock symbol">
-				<input type="submit" value="Track Stock">
+				<input id="logInToAddStock" type="submit" value="Log in to add a stock" disabled>
 			</form>
 			<br>
 		</div>
@@ -122,9 +63,9 @@
 					Remove a stock from your list of stocks to track
 				</body>
 				<br>
-				<input type="text" name = "id" placeholder="Enter in ID">
+				<!--<input type="text" name = "id" placeholder="Enter in ID">-->
 				<input type="text" name = "stocksymbol" placeholder="Enter stock symbol">
-				<input type="submit" value="Remove Stock">
+				<input id="logInToRmStock" type="submit" value="Log in to remove stocks from your portfolio" disabled>
 			</form>
 			<br>
 		</div>
@@ -140,12 +81,12 @@
 				<input type="text" name = "buyOrSell" placeholder="Type buy or sell">
 				<input type="text" name = "price" placeholder="Price">
 				<input type="text" name = "quantity" placeholder="Quantity">
-				<input type="submit" value = "Track Rule">
+				<input id="logInToAddRule" type="submit" value = "Log in to add rule" disabled>
 			</form>
 			<br>
 		</div>
 	</div>
-	<div class="answers">
+	<div id="displayWindow" class="answers">
 		<img id="warren" alt="loadingImage" src="http://www.gannett-cdn.com/-mm-/1044cc33457dc55ab3882b134911cd284004350d/c=161-0-4757-3456&r=x404&c=534x401/local/-/media/USATODAY/USATODAY/2014/12/04/635533104145735711-AP-Earns-Berkshire-Hathaway.jpg">
 	</div>
 	<footer>

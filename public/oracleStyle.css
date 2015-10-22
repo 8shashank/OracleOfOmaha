@@ -137,3 +137,7 @@ button{
     background-color: lightsteelblue;
     width: 20%;
 }
+
+#stockQuoteBox{
+    background-color: lightgreen;
+}
