@@ -1,4 +1,5 @@
 /**
+ * Client side script for the OracleOfOmaha web engine
  * Created by Lawrence Waller on 10/21/15.
  */
 
@@ -77,6 +78,25 @@ function rmStock(stock){
     });
 }
 
+/* Function invoked by add rule button */
+function addRule(symbol, transactType, price, quantity){
+    getPageWithCallback("http://127.0.0.1:8080/trackRule?id=" + whoIsLoggedIn
+        + "&stockSymbol=" + symbol
+        + "&buyOrSell=" + transactType
+        + "&price=" + price
+        + "&quantity=" + quantity,
+
+        function(response) {
+            var myNode = document.getElementById("displayWindow");
+            while (myNode.firstChild) {
+                myNode.removeChild(myNode.firstChild);
+            }
+            var textNode = document.createTextNode(response);
+            myNode.appendChild(textNode);
+        }
+    );
+}
+
 /* Function invoked by sign up button */
 function signUp(){
     var name = prompt("Enter your name", "");
@@ -92,16 +112,59 @@ function signUp(){
     alert(name + ", you are now signed up. Now go make some great deals!");
 }
 
+
+function enableDisableForms(enable){
+    var showStocks = document.getElementById('showStocksID');
+    var addStocks = document.getElementById('addStockID');
+    var rmStocks = document.getElementById('rmStockID');
+    var addRule = document.getElementById('addRuleID');
+
+    var box1 = document.getElementById("logInToShowStocks");
+    var box2 = document.getElementById("logInToAddStock");
+    var box3 = document.getElementById("logInToRmStock");
+    var box4 = document.getElementById("logInToAddRule");
+
+    //enable or disable buttons on forms
+    box1.disabled = !enable;
+    box2.disabled = !enable;
+    box3.disabled = !enable;
+    box4.disabled = !enable;
+
+    var color;
+
+    //if enable is true, we are logging in, we want to enable all the forms and change them to green
+    if(enable){
+        color = 'lightgreen';
+        box1.value = "Show Stocks";
+        box2.value = "Add Stock";
+        box3.value = "Remove Stock";
+        box4.value = "Add Rule";
+    }
+    //if enable is false, we are logging out, we want to disable and red-out some forms
+    else{
+        color = 'lightpink';
+        box1.value = box2.value = box3.value = box4.value = "Log in to enable";
+    }
+
+    //change color of login-dependent forms
+    showStocks.style.backgroundColor = addStocks.style.backgroundColor =
+        rmStocks.style.backgroundColor = addRule.style.backgroundColor = color;
+
+}
+
 /* Function invoked by log in button */
 function logIn(){
-    if(loggedIn){
+    if(loggedIn){ //we are logged in now, and this is a logout request
         whoIsLoggedIn = null;
         loggedIn = false;
         document.getElementById("logInOutButton").innerHTML = "Log In";
         alert("You are logged out.");
         document.getElementById("viewTutorialButton").style.visibility = "visible";
+
+        enableDisableForms(false);
         return;
     }
+    //otherwise, we are not logged in, and this is a login request
     var name = prompt("Enter your name", "");
     if (name === "") {
         alert('Fill out the form properly, please!');
@@ -120,24 +183,10 @@ function logIn(){
             alert("Welcome, " + name + "! You are logged in.");
             loggedIn = true;
             whoIsLoggedIn = name;
-            document.getElementById("logInOutButton").innerHTML = "Click Here to Logout";
+            document.getElementById("logInOutButton").innerHTML = "Logout " + whoIsLoggedIn;
             document.getElementById("viewTutorialButton").style.visibility = "hidden";
 
-            var box1 = document.getElementById("logInToShowStocks");
-            box1.disabled = false;
-            box1.value = "Show Stocks";
-
-            var box2 = document.getElementById("logInToAddStock");
-            box2.disabled = false;
-            box2.value = "Add Stock";
-
-            var box3 = document.getElementById("logInToRmStock");
-            box3.disabled = false;
-            box3.value = "Remove Stock";
-
-            var box4 = document.getElementById("logInToAddRule");
-            box4.disabled = false;
-            box4.value = "Add Rule";
+            enableDisableForms(true);
         }
         else{
             boolean = false;

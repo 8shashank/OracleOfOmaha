@@ -22,12 +22,12 @@
 	</header>
 
 	<div class="boxes">
-		<div class="boxID">
+		<div id="showStocksID" class="boxID">
 				<body>
 					Show the stocks you are tracking
 				</body>
 				<br>
-				<input id="logInToShowStocks" type="submit" value="Log in to show your portfolio"
+				<input id="logInToShowStocks" type="submit" value="Log in to enable"
 					   onclick="showStocks()" disabled>
 			<br>
 		</div>
@@ -37,43 +37,44 @@
 				</body>
 				<br>
 				<input id="myID" type = "text" name="stockID" placeholder="Enter in a stock symbol">
-				<input type="submit" value = "Try it now!" onclick="getQuote(document.getElementById('myID').value)">
+				<input type="submit" value = "Try it now, no sign up required!" onclick="getQuote(document.getElementById('myID').value)">
 			<br>
 		</div>
-		<div class="boxAddStock">
+		<div id="addStockID" class="boxAddStock">
 				<body>
 					Add a stock to your list of stocks to track
 				</body>
 				<br>
 				<input id="addStockInputField" type="text" name = "stocksymbol" placeholder="Enter stock symbol">
-				<input id="logInToAddStock" type="submit" value="Log in to add a stock"
+				<input id="logInToAddStock" type="submit" value="Log in to enable"
 					   onclick="addStock(document.getElementById('addStockInputField').value)" disabled>
 			<br>
 		</div>
-		<div class="boxRmStock">
+		<div id="rmStockID" class="boxRmStock">
 				<body>
 					Remove a stock from your list of stocks to track
 				</body>
 				<br>
 				<input id="rmStockInputField" type="text" name = "stocksymbol" placeholder="Enter stock symbol">
-				<input id="logInToRmStock" type="submit" value="Log in to remove stocks from your portfolio"
+				<input id="logInToRmStock" type="submit" value="Log in to enable"
 					   onclick="rmStock(document.getElementById('rmStockInputField').value)" disabled>
 			<br>
 		</div>
-		<div class="boxAddRule">
-			<form action="http://127.0.0.1:8080/trackRule" method="GET">
+		<div id="addRuleID" class="boxAddRule">
 				<body>
-					Add a rule to track for trading
-					Enter in your id, the stock symbol for the rule, "buy or sell" and price
+					Add a rule to the trading engine:
+					enter a stock symbol, "buy or sell," and the desired price and quantity
 				</body>
 				<br>
-				<input type="text" name = "id" placeholder="Enter your ID">
-				<input type="text" name = "stockSymbol" placeholder="Enter stock symbol">
-				<input type="text" name = "buyOrSell" placeholder="Type buy or sell">
-				<input type="text" name = "price" placeholder="Price">
-				<input type="text" name = "quantity" placeholder="Quantity">
-				<input id="logInToAddRule" type="submit" value = "Log in to add rule" disabled>
-			</form>
+				<input id="enterStockSymbol" type="text" name = "stockSymbol" placeholder="Enter stock symbol">
+				<input id="buyOrSell" type="text" name = "buyOrSell" placeholder="Type buy or sell">
+				<input id="priceInput" type="text" name = "price" placeholder="Price">
+				<input id="quantityInput" type="text" name = "quantity" placeholder="Quantity">
+				<input id="logInToAddRule" type="submit" value = "Log in to enable"
+					   onclick="addRule(document.getElementById('enterStockSymbol').value,
+					   document.getElementById('buyOrSell').value,
+					   document.getElementById('priceInput').value,
+					   document.getElementById('quantityInput').value)" disabled>
 			<br>
 		</div>
 	</div>

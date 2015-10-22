@@ -141,3 +141,7 @@ button{
 #stockQuoteBox{
     background-color: lightgreen;
 }
+
+#showStocksID, #addStockID, #rmStockID, #addRuleID{
+    background-color: lightpink;
+}
